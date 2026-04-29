@@ -522,7 +522,24 @@
         gap: 6px;
       }
 
-      .search-field span i { font-size: 12px; color: var(--text-dim); }
+      .search-field span i { font-size: 12px; color: var(--text-dim);
+       }
+
+      .search-select {
+         border: none;
+         background: transparent;
+         font-size: 16px;
+         font-weight: 600;
+         color: #333;
+         outline: none;
+         cursor: pointer;
+         appearance: none; /* Remove a seta padrão do navegador */
+         background-image: url('data:image/svg+xml;charset=US-ASCII,<svg%20xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%20width%3D"12"%20height%3D"12"%20viewBox%3D"0%200%2024%2024" fill="none" stroke="%23333" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path%20d%3D"M6%209l6%206%206-6"%2F><%2Fsvg>');
+         background-repeat: no-repeat;
+         background-position: right center;
+         padding-right: 20px;
+       }
+
 
       .search-btn {
         margin-left: 20px;
@@ -883,7 +900,7 @@
       .plan-card ul { list-style: none; margin-bottom: 28px; }
 
       .plan-card li {
-        color: #9ca3af;
+        color: #ffff;
         font-size: 0.92rem;
         padding: 7px 0;
         display: flex;
@@ -1449,6 +1466,8 @@
       }
 
       .page-section.hidden { display: none !important; }
+
+      
     </style>
   </head>
   <body>
@@ -1541,26 +1560,41 @@
           </div>
         </section>
 
-        <!-- SEARCH BAR -->
-        <div class="search-bar-section">
-          <div class="search-bar-inner">
-            <div class="search-field">
-              <label>Cidade</label>
-              <span>Botelhos, MG <i class="fas fa-chevron-down"></i></span>
-            </div>
-            <div class="search-field">
-              <label>Tipo de Conexão</label>
-              <span>Fibra Óptica <i class="fas fa-chevron-down"></i></span>
-            </div>
-            <div class="search-field">
-              <label>Velocidade</label>
-              <span>A partir de 400MB <i class="fas fa-chevron-down"></i></span>
-            </div>
-            <button class="search-btn" onclick="document.getElementById('nossos-planos').scrollIntoView({behavior:'smooth'})">
-              <i class="fas fa-search"></i> Ver Planos Disponíveis
-            </button>
-          </div>
-        </div>
+      <div class="search-bar-section">
+  <div class="search-bar-inner">
+    
+    <div class="search-field">
+      <label for="cidade">Cidade</label>
+      <select id="cidade" class="search-select">
+        <option value="botelhos">Botelhos, MG</option>
+        <option value="pocos-de-caldas">Poços de Caldas, MG</option>
+        <option value="caconde">Caconde, SP</option>
+        <option value="divisa-nova">Divisa Nova, MG</option>
+      </select>
+    </div>
+
+    <div class="search-field">
+      <label for="conexao">Tipo de Conexão</label>
+      <select id="conexao" class="search-select">
+        <option value="fibra">Fibra Óptica</option>
+        <option value="rural">Internet Rural</option>
+      </select>
+    </div>
+
+    <div class="search-field">
+      <label for="velocidade">Velocidade</label>
+      <select id="velocidade" class="search-select">
+        <option value="100mb">100 MB</option>
+        <option value="400mb" selected>400 MB</option>
+        <option value="800mb">800 MB</option>
+      </select>
+    </div>
+
+    <button class="search-btn" onclick="document.getElementById('nossos-planos').scrollIntoView({behavior:'smooth'})">
+      <i class="fas fa-search"></i> Ver Planos Disponíveis
+    </button>
+  </div>
+</div>
 
         <!-- SLIDES -->
         <section class="swiper-section">
