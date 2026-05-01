@@ -317,7 +317,6 @@
         justify-content: center;
         position: relative;
         overflow: hidden;
-        /* FIX 1: Garante que o conteúdo fique acima dos pseudo-elementos */
         isolation: isolate;
       }
 
@@ -328,7 +327,6 @@
         width: 400px; height: 400px;
         background: radial-gradient(circle, rgba(61,184,67,0.15) 0%, transparent 70%);
         border-radius: 50%;
-        /* FIX 2: Pseudo-elementos atrás do conteúdo */
         z-index: -1;
         pointer-events: none;
       }
@@ -340,7 +338,6 @@
         width: 250px; height: 250px;
         background: radial-gradient(circle, rgba(61,184,67,0.08) 0%, transparent 70%);
         border-radius: 50%;
-        /* FIX 2: Pseudo-elementos atrás do conteúdo */
         z-index: -1;
         pointer-events: none;
       }
@@ -405,7 +402,11 @@
         z-index: 1;
       }
 
-      /* FIX 3: hero-cta com z-index e pointer-events explícitos */
+      /*
+       * FIX HERO CTA:
+       * - Sem data-aos (evita que o AOS bloqueie cliques no mobile)
+       * - z-index alto + pointer-events explícito
+       */
       .hero-cta {
         display: flex;
         gap: 12px;
@@ -415,7 +416,6 @@
         pointer-events: auto;
       }
 
-      /* FIX 4: Garantir que botões dentro do hero sejam clicáveis */
       .hero-cta > * {
         position: relative;
         z-index: 10;
@@ -439,7 +439,6 @@
         display: inline-flex;
         align-items: center;
         gap: 7px;
-        /* FIX 5: Garantir toque no mobile */
         -webkit-tap-highlight-color: rgba(255,255,255,0.1);
         touch-action: manipulation;
         min-height: 44px;
@@ -1474,7 +1473,6 @@
         .search-bar-inner { gap: 0; }
         .search-field { min-width: 140px; padding: 0 14px; }
 
-        /* FIX MOBILE: Garantir que botões hero sejam clicáveis */
         .hero-left {
           padding: 64px 24px 72px;
         }
@@ -1520,7 +1518,11 @@
 
       .page-section.hidden { display: none !important; }
 
-      /* FIX GLOBAL: Desabilitar AOS pointer-events bloqueio no mobile */
+      /*
+       * FIX CRÍTICO: elementos com data-aos NUNCA devem bloquear pointer-events.
+       * Isso garante que botões dentro de contêineres animados sejam clicáveis
+       * em todos os dispositivos, incluindo mobile.
+       */
       [data-aos] {
         pointer-events: auto !important;
       }
@@ -1585,7 +1587,12 @@
             <p>
               Internet rural e Fibra óptica de última geração no Sul de Minas. Estabilidade real, suporte humano.
             </p>
-            <!-- FIX: Removido data-aos do hero-cta para não bloquear clique no mobile -->
+            <!--
+              HERO CTA: sem data-aos propositalmente.
+              O AOS aplica "pointer-events: none" durante a animação de entrada,
+              o que bloqueia cliques no mobile. Como a hero já está visível ao
+              carregar, não há perda visual — e os botões funcionam corretamente.
+            -->
             <div class="hero-cta">
               <button class="btn-secondary"
                       onclick="showPage('suporte'); window.scrollTo({top: 0, behavior: 'smooth'});">
@@ -2046,10 +2053,14 @@
           AOS.init({
             duration: 900,
             once: true,
-            // FIX: Desabilita AOS em dispositivos móveis para não interferir em cliques
-            disable: function() {
-              return window.innerWidth < 768;
-            }
+            /*
+             * FIX DEFINITIVO: NÃO desabilitar AOS no mobile.
+             * O AOS fica ativo em TODOS os dispositivos para preservar
+             * as animações de scroll. O problema dos botões da hero foi
+             * resolvido de outra forma: removendo data-aos do .hero-cta
+             * e usando isolation:isolate + z-index no .hero-left,
+             * garantindo que pseudo-elementos fiquem atrás dos botões.
+             */
           });
         }
         initSwiper();
