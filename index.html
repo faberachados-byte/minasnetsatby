@@ -115,12 +115,12 @@
 
       .top-bar-contact span i { color: var(--green); }
 
-      /* ── HEADER — DARK ── */
+      /* ── HEADER ── */
       header {
         position: sticky;
         top: 0; left: 0;
         width: 100%;
-        background: #111827; /* ALTERADO: fundo preto igual ao hero-left */
+        background: #111827;
         backdrop-filter: blur(16px);
         border-bottom: 1px solid rgba(255,255,255,0.08);
         z-index: 10015;
@@ -136,16 +136,15 @@
         margin: 0 auto;
         width: 100%;
         padding: 0 32px;
-        height: 72px; /* ligeiramente mais alto para comportar logo maior */
+        height: 72px;
       }
 
-      /* LOGO MAIOR */
-      .logo img { height: 52px; cursor: pointer; } 
+      .logo img { height: 52px; cursor: pointer; }
 
       .nav-menu { display: flex; gap: 4px; list-style: none; }
 
       .nav-link {
-        color: #d1d5db; 
+        color: #d1d5db;
         text-decoration: none;
         font-weight: 600;
         font-size: 14px;
@@ -163,7 +162,7 @@
       .nav-actions { display: flex; align-items: center; gap: 10px; }
 
       .btn-login {
-        color: #d1d5db; /* ALTERADO: texto claro */
+        color: #d1d5db;
         background: rgba(255,255,255,0.07);
         border: 1.5px solid rgba(255,255,255,0.18);
         padding: 8px 20px;
@@ -222,12 +221,12 @@
         transition: background .2s;
       }
 
-      .hamburger:hover { background: rgba(61,184,67,0.15); } /* ALTERADO: hover escuro */
+      .hamburger:hover { background: rgba(61,184,67,0.15); }
 
       .hamburger .bar {
         display: block;
         width: 22px; height: 2px;
-        background: #d1d5db; /* ALTERADO: barras claras */
+        background: #d1d5db;
         margin: 5px auto;
         transition: .35s cubic-bezier(.175,.885,.32,1.275);
         border-radius: 2px;
@@ -242,7 +241,7 @@
         position: fixed;
         top: 0; left: 0;
         width: 100%; height: 100vh;
-        background: rgba(17,24,39,0.98); /* ALTERADO: fundo escuro no mobile nav também */
+        background: rgba(17,24,39,0.98);
         backdrop-filter: blur(20px);
         z-index: 10010;
         visibility: hidden;
@@ -262,7 +261,7 @@
         font-family: "Nunito", sans-serif;
         font-size: 1.8rem;
         font-weight: 800;
-        color: #d1d5db; /* ALTERADO: texto claro */
+        color: #d1d5db;
         text-decoration: none;
         cursor: pointer;
         padding: 10px 32px;
@@ -318,6 +317,8 @@
         justify-content: center;
         position: relative;
         overflow: hidden;
+        /* FIX 1: Garante que o conteúdo fique acima dos pseudo-elementos */
+        isolation: isolate;
       }
 
       .hero-left::before {
@@ -327,6 +328,9 @@
         width: 400px; height: 400px;
         background: radial-gradient(circle, rgba(61,184,67,0.15) 0%, transparent 70%);
         border-radius: 50%;
+        /* FIX 2: Pseudo-elementos atrás do conteúdo */
+        z-index: -1;
+        pointer-events: none;
       }
 
       .hero-left::after {
@@ -336,6 +340,9 @@
         width: 250px; height: 250px;
         background: radial-gradient(circle, rgba(61,184,67,0.08) 0%, transparent 70%);
         border-radius: 50%;
+        /* FIX 2: Pseudo-elementos atrás do conteúdo */
+        z-index: -1;
+        pointer-events: none;
       }
 
       .hero-eyebrow {
@@ -353,6 +360,8 @@
         color: var(--green);
         margin-bottom: 28px;
         width: fit-content;
+        position: relative;
+        z-index: 1;
       }
 
       .hero-eyebrow::before {
@@ -376,6 +385,8 @@
         line-height: 1.1;
         margin-bottom: 20px;
         color: #fff;
+        position: relative;
+        z-index: 1;
       }
 
       .hero-left h1 em {
@@ -390,12 +401,27 @@
         font-weight: 400;
         margin-bottom: 36px;
         line-height: 1.7;
+        position: relative;
+        z-index: 1;
       }
 
+      /* FIX 3: hero-cta com z-index e pointer-events explícitos */
       .hero-cta {
         display: flex;
         gap: 12px;
         flex-wrap: wrap;
+        position: relative;
+        z-index: 10;
+        pointer-events: auto;
+      }
+
+      /* FIX 4: Garantir que botões dentro do hero sejam clicáveis */
+      .hero-cta > * {
+        position: relative;
+        z-index: 10;
+        pointer-events: auto;
+        -webkit-tap-highlight-color: rgba(61,184,67,0.2);
+        touch-action: manipulation;
       }
 
       .btn-secondary {
@@ -413,9 +439,13 @@
         display: inline-flex;
         align-items: center;
         gap: 7px;
+        /* FIX 5: Garantir toque no mobile */
+        -webkit-tap-highlight-color: rgba(255,255,255,0.1);
+        touch-action: manipulation;
+        min-height: 44px;
       }
 
-      .btn-secondary:hover {
+      .btn-secondary:hover, .btn-secondary:active {
         border-color: var(--green);
         color: var(--green);
         background: rgba(61,184,67,0.1);
@@ -437,6 +467,7 @@
         position: absolute;
         inset: 0;
         background: linear-gradient(135deg, rgba(17,24,39,0.3) 0%, transparent 60%);
+        pointer-events: none;
       }
 
       .hero-stats-bar {
@@ -449,6 +480,7 @@
         justify-content: space-around;
         gap: 16px;
         border-top: 1px solid rgba(255,255,255,0.1);
+        pointer-events: none;
       }
 
       .hero-stat {
@@ -523,24 +555,22 @@
         gap: 6px;
       }
 
-      .search-field span i { font-size: 12px; color: var(--text-dim);
-       }
+      .search-field span i { font-size: 12px; color: var(--text-dim); }
 
       .search-select {
-         border: none;
-         background: transparent;
-         font-size: 16px;
-         font-weight: 600;
-         color: #333;
-         outline: none;
-         cursor: pointer;
-         appearance: none;
-         background-image: url('data:image/svg+xml;charset=US-ASCII,<svg%20xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%20width%3D"12"%20height%3D"12"%20viewBox%3D"0%200%2024%2024" fill="none" stroke="%23333" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path%20d%3D"M6%209l6%206%206-6"%2F><%2Fsvg>');
-         background-repeat: no-repeat;
-         background-position: right center;
-         padding-right: 20px;
-       }
-
+        border: none;
+        background: transparent;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        outline: none;
+        cursor: pointer;
+        appearance: none;
+        background-image: url('data:image/svg+xml;charset=US-ASCII,<svg%20xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%20width%3D"12"%20height%3D"12"%20viewBox%3D"0%200%2024%2024" fill="none" stroke="%23333" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path%20d%3D"M6%209l6%206%206-6"%2F><%2Fsvg>');
+        background-repeat: no-repeat;
+        background-position: right center;
+        padding-right: 20px;
+      }
 
       .search-btn {
         margin-left: 20px;
@@ -560,6 +590,7 @@
         transition: all .2s;
         box-shadow: var(--shadow-green);
         flex-shrink: 0;
+        touch-action: manipulation;
       }
 
       .search-btn:hover { background: var(--green-dark); transform: translateY(-1px); }
@@ -915,13 +946,13 @@
       .plan-card li::before {
         content: "";
         width: 16px; height: 16px;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='%233db843' stroke-width='1.5'/%3E%3Cpath d='M5 8l2 2 4-4' stroke='%233db843' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='%233db843' stroke-width='1.5'/%3E%3Cpath d='M5 8l2 2 4-4' stroke='%233db843' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C%2Fsvg%3E");
         background-size: contain;
         flex-shrink: 0;
       }
 
       .plan-card--featured li::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='%23ffffff' stroke-width='1.5'/%3E%3Cpath d='M5 8l2 2 4-4' stroke='%23ffffff' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='%23ffffff' stroke-width='1.5'/%3E%3Cpath d='M5 8l2 2 4-4' stroke='%23ffffff' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C%2Fsvg%3E");
       }
 
       .btn-plan-white {
@@ -941,6 +972,7 @@
         gap: 7px;
         border: none;
         transition: all .2s;
+        touch-action: manipulation;
       }
 
       .btn-plan-white:hover { background: var(--green-light); }
@@ -962,6 +994,7 @@
         align-items: center;
         gap: 7px;
         transition: all .2s;
+        touch-action: manipulation;
       }
 
       .btn-plan-outline:hover {
@@ -987,7 +1020,7 @@
         text-transform: uppercase;
       }
 
-      /* ── FEATURE CARDS (why choose us) ── */
+      /* ── FEATURE CARDS ── */
       .features-section {
         padding: 80px 0;
         background: var(--surface-2);
@@ -1019,6 +1052,7 @@
         transform: scaleX(0);
         transform-origin: left;
         transition: transform .3s;
+        pointer-events: none;
       }
 
       .feature-card:hover {
@@ -1099,6 +1133,7 @@
         border-radius: 3px 3px 0 0;
         opacity: 0;
         transition: opacity .3s;
+        pointer-events: none;
       }
 
       .stat-card:hover {
@@ -1277,6 +1312,7 @@
         font-size: 0.95rem;
         letter-spacing: 0.5px;
         box-shadow: var(--shadow-green);
+        touch-action: manipulation;
       }
 
       .submitbutton:hover {
@@ -1380,6 +1416,7 @@
         justify-content: center;
         text-decoration: none;
         transition: all .3s cubic-bezier(.4,0,.2,1);
+        touch-action: manipulation;
       }
 
       .whatsapp-float:hover {
@@ -1410,10 +1447,6 @@
 
       #contato input::placeholder, #contato textarea::placeholder { color: var(--text-light); }
 
-      /* ── COBERTURA ── */
-      #cobertura .cover-header h2 { color: var(--text); font-size: 1.3rem; margin-bottom: 8px; }
-      #cobertura .cover-header p { color: var(--text-mid); }
-
       /* ── SECTION TITLES ── */
       .section-title-center {
         text-align: center;
@@ -1440,6 +1473,25 @@
         .top-bar-contact { display: none; }
         .search-bar-inner { gap: 0; }
         .search-field { min-width: 140px; padding: 0 14px; }
+
+        /* FIX MOBILE: Garantir que botões hero sejam clicáveis */
+        .hero-left {
+          padding: 64px 24px 72px;
+        }
+        .hero-cta {
+          flex-direction: column;
+          gap: 14px;
+          width: 100%;
+        }
+        .hero-cta .btn-secondary,
+        .hero-cta .btn-whatsapp {
+          width: 100%;
+          justify-content: center;
+          min-height: 52px;
+          font-size: 15px;
+          border-radius: 12px;
+          padding: 14px 24px;
+        }
       }
 
       @media (max-width: 768px) {
@@ -1468,7 +1520,13 @@
 
       .page-section.hidden { display: none !important; }
 
-      
+      /* FIX GLOBAL: Desabilitar AOS pointer-events bloqueio no mobile */
+      [data-aos] {
+        pointer-events: auto !important;
+      }
+      [data-aos].aos-animate {
+        pointer-events: auto !important;
+      }
     </style>
   </head>
   <body>
@@ -1521,31 +1579,29 @@
         <section class="hero">
           <div class="hero-left">
             <div class="hero-eyebrow">Sul de Minas conectado</div>
-            <h1 data-aos="fade-right">
+            <h1>
               Conecte Sua<br><em>Casa ou Fazenda</em><br>com Ultra Velocidade
             </h1>
-            <p data-aos="fade-right" data-aos-delay="150">
+            <p>
               Internet rural e Fibra óptica de última geração no Sul de Minas. Estabilidade real, suporte humano.
             </p>
-            <div class="hero-cta" data-aos="fade-right" data-aos-delay="280">
-
-              <button class="btn-secondary" 
-                      onclick="if(typeof showPage === 'function'){ showPage('suporte'); window.scrollTo({top: 0, behavior: 'smooth'}); }">
+            <!-- FIX: Removido data-aos do hero-cta para não bloquear clique no mobile -->
+            <div class="hero-cta">
+              <button class="btn-secondary"
+                      onclick="showPage('suporte'); window.scrollTo({top: 0, behavior: 'smooth'});">
                 <i class="fas fa-user"></i> Área do Assinante
               </button>
 
-              <a href="https://wa.me/5535999531207" 
-                  target="_blank" 
-                  class="btn-whatsapp" 
-                  style="padding:12px 28px; font-size:14px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
-                  <i class="fab fa-whatsapp"></i> Conversar no WhatsApp
-                </a>
-
-              
+              <a href="https://wa.me/5535999531207"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 class="btn-whatsapp"
+                 style="padding:12px 28px; font-size:14px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+                <i class="fab fa-whatsapp"></i> Conversar no WhatsApp
+              </a>
             </div>
           </div>
           <div class="hero-right">
-            
             <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=1200&q=80" alt="Fibra Óptica - Tecnologia" />
             <div class="hero-right-overlay"></div>
             <div class="hero-stats-bar">
@@ -1569,41 +1625,40 @@
           </div>
         </section>
 
-      <div class="search-bar-section">
-  <div class="search-bar-inner">
-    
-    <div class="search-field">
-      <label for="cidade">Cidade</label>
-      <select id="cidade" class="search-select">
-        <option value="botelhos">Botelhos, MG</option>
-        <option value="pocos-de-caldas">Poços de Caldas, MG</option>
-        <option value="caconde">Caconde, SP</option>
-        <option value="divisa-nova">Divisa Nova, MG</option>
-      </select>
-    </div>
+        <div class="search-bar-section">
+          <div class="search-bar-inner">
+            <div class="search-field">
+              <label for="cidade">Cidade</label>
+              <select id="cidade" class="search-select">
+                <option value="botelhos">Botelhos, MG</option>
+                <option value="pocos-de-caldas">Poços de Caldas, MG</option>
+                <option value="caconde">Caconde, SP</option>
+                <option value="divisa-nova">Divisa Nova, MG</option>
+              </select>
+            </div>
 
-    <div class="search-field">
-      <label for="conexao">Tipo de Conexão</label>
-      <select id="conexao" class="search-select">
-        <option value="fibra">Fibra Óptica</option>
-        <option value="rural">Internet Rural</option>
-      </select>
-    </div>
+            <div class="search-field">
+              <label for="conexao">Tipo de Conexão</label>
+              <select id="conexao" class="search-select">
+                <option value="fibra">Fibra Óptica</option>
+                <option value="rural">Internet Rural</option>
+              </select>
+            </div>
 
-    <div class="search-field">
-      <label for="velocidade">Velocidade</label>
-      <select id="velocidade" class="search-select">
-        <option value="100mb">100 MB</option>
-        <option value="400mb" selected>400 MB</option>
-        <option value="800mb">800 MB</option>
-      </select>
-    </div>
+            <div class="search-field">
+              <label for="velocidade">Velocidade</label>
+              <select id="velocidade" class="search-select">
+                <option value="100mb">100 MB</option>
+                <option value="400mb" selected>400 MB</option>
+                <option value="800mb">800 MB</option>
+              </select>
+            </div>
 
-    <button class="search-btn" onclick="document.getElementById('nossos-planos').scrollIntoView({behavior:'smooth'})">
-      <i class="fas fa-search"></i> Ver Planos Disponíveis
-    </button>
-  </div>
-</div>
+            <button class="search-btn" onclick="document.getElementById('nossos-planos').scrollIntoView({behavior:'smooth'})">
+              <i class="fas fa-search"></i> Ver Planos Disponíveis
+            </button>
+          </div>
+        </div>
 
         <!-- SLIDES -->
         <section class="swiper-section">
@@ -1987,7 +2042,16 @@
       let swiperInstance;
 
       document.addEventListener("DOMContentLoaded", () => {
-        if (typeof AOS !== "undefined") AOS.init({ duration: 900, once: true });
+        if (typeof AOS !== "undefined") {
+          AOS.init({
+            duration: 900,
+            once: true,
+            // FIX: Desabilita AOS em dispositivos móveis para não interferir em cliques
+            disable: function() {
+              return window.innerWidth < 768;
+            }
+          });
+        }
         initSwiper();
 
         $(document).on("submit", "#form_login_novo", function(e) {
@@ -2096,8 +2160,6 @@
         const msg = document.getElementById("contato-mensagem").value;
         window.open(`https://wa.me/5535999531207?text=${encodeURIComponent("Olá, meu nome é " + nome + ". " + msg)}`, "_blank");
       }
-
-
     </script>
   </body>
 </html>
