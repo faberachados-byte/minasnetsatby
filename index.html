@@ -1529,10 +1529,11 @@
             </p>
             <div class="hero-cta" data-aos="fade-right" data-aos-delay="280">
 
-              <button class="btn-secondary" onclick="showPage('suporte')">
+              <button class="btn-secondary" 
+                      onclick="if(typeof showPage === 'function'){ showPage('suporte'); window.scrollTo({top: 0, behavior: 'smooth'}); }">
                 <i class="fas fa-user"></i> Área do Assinante
               </button>
-              
+
               <a href="https://wa.me/5535999531207" 
                   target="_blank" 
                   class="btn-whatsapp" 
@@ -2096,33 +2097,6 @@
         window.open(`https://wa.me/5535999531207?text=${encodeURIComponent("Olá, meu nome é " + nome + ". " + msg)}`, "_blank");
       }
 
-      
-  
-      function forcarIrParaPlanos(event) {
-        if (event) event.preventDefault(); // Impede qualquer comportamento estranho do botão
-
-        console.log("Botão clicado, tentando ir para planos...");
-
-        // 1. Mostra a home (caso esteja em outra aba)
-        if (typeof showPage === 'function') {
-          showPage('home');
-        }
-
-        // 2. Tenta rolar imediatamente e tenta de novo após um pequeno delay
-        // Isso cobre casos onde a página já está aberta e casos onde está abrindo
-        const scrollDestino = () => {
-          const el = document.getElementById('nossos-planos');
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            console.log("Sucesso: Rolo para a seção.");
-          } else {
-            console.error("Erro crítico: O elemento #nossos-planos não existe no HTML.");
-          }
-        };
-
-        scrollDestino(); // Tentativa 1
-        setTimeout(scrollDestino, 300); // Tentativa 2 (mais lenta para garantir)
-      }
 
     </script>
   </body>
